@@ -16,6 +16,7 @@ export class EntryService {
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<Entry[]>{
+    
     return this.http.get(this.apiPath).pipe(
       catchError(this.handleError),
       map(this.jsonDataToEntries)
@@ -55,12 +56,16 @@ export class EntryService {
   }
 
   private jsonDataToEntry(jsonData: any) : Entry  {
-    return jsonData as Entry;
+    return  Object.assign(new Entry(), jsonData);
   }
 
   private jsonDataToEntries(jsonData: any[]) : Entry[] {
     const entries: Entry[]=[];
-    jsonData.forEach(element => entries.push( element as Entry));
+
+    jsonData.forEach(element =>{
+      const entry = Object.assign(new Entry(),element) //criando objeto para acessar completo
+      entries.push(entry);
+    })
     return entries;
   }
 
