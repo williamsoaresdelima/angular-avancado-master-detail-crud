@@ -20,9 +20,8 @@ export class EntryListComponent implements OnInit {
 
     console.log('Valor', this.entryservice.getAll())
 
-
     this.entryservice.getAll().subscribe(
-      entries => this.entries = entries,
+      entries => this.entries = entries.sort((a,b) => b.id - a.id),
       error => alert ('Erro ao carregar listagem')
     )
   }

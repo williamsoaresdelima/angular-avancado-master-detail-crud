@@ -103,14 +103,8 @@
                     </div>
                 </div>
 
-                <!--description-->
-                <div class="form-group col-md-7">
-                    <label for="name">Descrição</label>
-                    <input type="text" class="form-control" id="name" formControlName="description"> 
-                </div>
-
                 <!--categoryId-->
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-3 ml-3">
                     <label for="name">Categoria</label>
                     <select name="categoryId" id="categoryId" formControlName="categoryId" class="form-control">
                         <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
@@ -121,6 +115,11 @@
                     </div>
                 </div>
 
+                <!--description-->
+                <div class="form-group col-md-6">
+                    <label for="name">Descrição</label>
+                    <input type="text" class="form-control" id="name" formControlName="description"> 
+                </div>
 
             </div>
         </div>
