@@ -35,14 +35,25 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
 
   ngOnInit(): void {
     this.setCurrentAction();
-    this.buildCategoryForm();
     this.loadCategory();
+    this.buildCategoryForm();
   }
 
   
   ngAfterContentChecked(){
     this.setPageTitle();
   }
+
+  submitForm(){
+    this.submittingForm = true;
+    
+    if(this.currencyAction == "new")
+      this.createCategory();
+    else
+      this.updateCategory();
+    //
+  }
+
 
   // PRIVATE METHODS
   private setCurrentAction(){
@@ -62,12 +73,15 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
 
   private loadCategory(){
     if(this.currencyAction=="edit"){
+
+
       this.route.paramMap.pipe(
-        switchMap(params => this.categoryService.getById(+params.get("id")))
+        switchMap(params => this.categoryService.getById(+params.get("id"))),
+        
       ).subscribe(
-        (wcategory)=>{
-          this.category = this.category;
-          this.categoryForm.patchValue(this.category);//binds loadd category data to CategoryForms
+        (category)=>{
+          this.category = category;
+          this.categoryForm.patchValue(category);//binds loadd category data to CategoryForms
         },(error) => alert('Ocorreu um erro no servidor!')
       )
     }
@@ -79,6 +93,48 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     else{
       const categoryName = this.category.name || "";
       this.pageTitle = 'Editar Categoria: ' + categoryName;
+    }
+  }
+
+  private createCategory(){
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryService.create(category)
+    .subscribe(
+      category  => this.actionsForSuccess(category),
+      error => this.actionsForError(error)
+    );
+  }
+
+  private updateCategory(){
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+
+    this.categoryService.update(category)
+        .subscribe(
+          categor   => this.actionsForSuccess(category),
+          error => this.actionsForError(error)
+        );
+  }
+
+  private actionsForSuccess(category: Category){
+    toastr.success("Soclicitação Processada com Sucesso!");
+    
+    //redirect/reload componentpage
+    this.router.navigateByUrl("categories", {skipLocationChange:true}).then(
+      () => this.router.navigate(["categories", category.id, "edit"])
+    );
+  }
+
+  private actionsForError(error){
+    toastr.error("Ocorreu um erro ao processar a sua solicitação! ");
+    this.submittingForm = false;
+    console.log(error);
+
+    if(error.status == 422 ) // erro que retorna do servidor
+    {
+      this.serverErrorMessages = JSON.parse(error._body).errors;
+      //retorna todos os erros num array de strings
+    }else{
+      this.serverErrorMessages = ["Falha na comunicação com o servidor, tente mais tarde!"];
     }
   }
 }
