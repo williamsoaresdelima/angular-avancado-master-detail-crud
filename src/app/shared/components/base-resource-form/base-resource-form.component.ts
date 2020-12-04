@@ -1,4 +1,4 @@
-import { OnInit,AfterContentChecked, Injector } from '@angular/core';
+import { OnInit,AfterContentChecked, Injector,Directive  } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
@@ -8,9 +8,8 @@ import { BaseResourceService } from "../../services/base-resource.service";
 import { switchMap } from "rxjs/operators";
 
 import toastr from "toastr";
-import { THIS_EXPR, ThrowStmt } from '@angular/compiler/src/output/output_ast';
 
-
+@Directive()
 export abstract class BaseResouceFormComponent<T extends BaseResourceModel> implements OnInit, AfterContentChecked {
 
   currencyAction: string;
@@ -101,9 +100,9 @@ export abstract class BaseResouceFormComponent<T extends BaseResourceModel> impl
   }
 
   protected updateResource(){
-    const resource: this.jsonDataToResourceFn(this.resourceForm.value);
+    const resource= this.jsonDataToResourceFn(this.resourceForm.value);
 
-    this.resourceService.update(this.resource)
+    this.resourceService.update(resource)
         .subscribe(
             resource   => this.actionsForSuccess(resource),
           error => this.actionsForError(error)
@@ -133,6 +132,7 @@ export abstract class BaseResouceFormComponent<T extends BaseResourceModel> impl
     }
   }
 
+  
   protected abstract buildResourceForm():void;
 
 }
