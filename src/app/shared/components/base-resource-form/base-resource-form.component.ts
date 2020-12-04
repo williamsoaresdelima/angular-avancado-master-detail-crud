@@ -18,7 +18,7 @@ export abstract class BaseResouceFormComponent<T extends BaseResourceModel> impl
   pageTitle: string;
   serverErrorMessages: string[]=null;
   submittingForm: boolean=false;
-  
+  testeComponenntForm: string;
 
   protected route: ActivatedRoute;
   protected router: Router;
