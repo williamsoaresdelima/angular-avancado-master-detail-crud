@@ -131,7 +131,6 @@ export abstract class BaseResouceFormComponent<T extends BaseResourceModel> impl
       this.serverErrorMessages = ["Falha na comunicação com o servidor, tente mais tarde!"];
     }
   }
-
   
   protected abstract buildResourceForm():void;
 
