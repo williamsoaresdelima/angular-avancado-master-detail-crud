@@ -10,6 +10,7 @@ import { CategoryService } from '../shared/category.service'
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.css']
 })
+
 export class CategoryListComponent extends BaseResourceListComponent<Category>{
 
   constructor(private categoryservice : CategoryService) { 
