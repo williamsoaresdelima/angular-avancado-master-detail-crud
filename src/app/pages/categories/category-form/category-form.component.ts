@@ -118,6 +118,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   private actionsForSuccess(category: Category){
     toastr.success("Soclicitação Processada com Sucesso!");
     
+    //console.log(this.route.snapshot.parent.url[0].path);
     //redirect/reload componentpage
     this.router.navigateByUrl("categories", {skipLocationChange:true}).then(
       () => this.router.navigate(["categories", category.id, "edit"])
