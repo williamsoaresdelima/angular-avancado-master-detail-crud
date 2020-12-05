@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { element } from 'protractor';
-import { CategoryFormComponent } from '../category-form/category-form.component';
+
+import { BaseResourceListComponent } from "../../../shared/components/base-resource-list/base-resource-list.component";
+
 import { Category } from '../shared/category.model'
 import { CategoryService } from '../shared/category.service'
 
@@ -9,32 +10,10 @@ import { CategoryService } from '../shared/category.service'
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.css']
 })
-export class CategoryListComponent implements OnInit {
 
-  categories : Category[]=[];
+export class CategoryListComponent extends BaseResourceListComponent<Category>{
 
-  constructor(private categoryservice : CategoryService) { }
-
-  ngOnInit() {
-    this.categoryservice.getAll().subscribe(
-      categories => this.categories = categories,
-      error => alert ('Erro ao carregar listagem')
-    )
+  constructor(private categoryservice : CategoryService) { 
+    super(categoryservice);
   }
-
-  deleteCategory(category : Category){
-    const mustDelete=confirm('Deseja excluir este ítem?');
-
-   if(mustDelete){
-      this.categoryservice.delete(category.id).subscribe(
-        ()=>this.categories= this.categories.filter(element=> element !=category),
-        () => alert("Erro ao excluie!")
-      )
-    }
-  }
-  public alert()
-  {
-    alert("excluir");
-  }
-
 }
